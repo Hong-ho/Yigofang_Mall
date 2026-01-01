@@ -54,7 +54,8 @@ export function initTabBarData(): Resource[] {
 }
 
 // 获取所有分类的商品数据
-function getAllGoods(): GoodsListItemType[] {
+
+export function getAllGoods(): GoodsListItemType[] {
   const goodsList: GoodsListItemType[] = [];
 
   // 每个分类生成20个商品
@@ -62,19 +63,41 @@ function getAllGoods(): GoodsListItemType[] {
   categories.forEach(category => {
     for (let i = 1; i <= 20; i++) {
       const id = goodsList.length + 1;
-      const imageIndex = (id % 4) + 1;
+      const imageIndex = id % 4;
+      let goodsName: ResourceStr = $r('app.string.goodsName');
+      let price: ResourceStr = $r('app.string.price_199');
+
+      // 按分类匹配专属商品名称 + 专属价格
+      switch (category) {
+        case CATEGORIES.MOBILE_PHONE:
+          goodsName = $r(`app.string.goods_name_phone_${imageIndex + 1}`);
+          price = $r(`app.string.goods_price_phone_${imageIndex + 1}`);
+          break;
+        case CATEGORIES.CLOTHES:
+          goodsName = $r(`app.string.goods_name_clothes_${imageIndex + 1}`);
+          price = $r(`app.string.goods_price_clothes_${imageIndex + 1}`);
+          break;
+        case CATEGORIES.WEAR:
+          goodsName = $r(`app.string.goods_name_wear_${imageIndex + 1}`);
+          price = $r(`app.string.goods_price_wear_${imageIndex + 1}`);
+          break;
+        case CATEGORIES.HOME_FURNISHING:
+          goodsName = $r(`app.string.goods_name_home_${imageIndex + 1}`);
+          price = $r(`app.string.goods_price_home_${imageIndex + 1}`);
+          break;
+      }
+
       goodsList.push({
         id: id,
-        goodsName: id % 2 === 0 ? $r('app.string.goodsName') : $r('app.string.another_goodsName'),
-        price: getPriceByIndex(id),
-        goodsImg: getImageByIndex(imageIndex),
+        goodsName: goodsName,
+        price: price,
+        goodsImg: getImageByCategoryAndIndex(category, imageIndex),
         advertisingLanguage: $r('app.string.advertising_language'),
         evaluate: $r('app.string.evaluate'),
         category: category
       });
     }
   });
-
   return goodsList;
 }
 
@@ -168,25 +191,50 @@ function getImageByCategoryAndIndex(category: string, index: number): Resource {
 // 定义每个分类的图片获取函数
 function getSelectedImage(index: number): Resource {
   switch (index) {
-    case 1: return $r('app.media.selected.goodsImg');
-    case 2: return $r('app.media.selected.goodsImg_2');
-    case 3: return $r('app.media.selected.goodsImg_3');
-    case 4: return $r('app.media.selected.goodsImg_4');
-    default: return $r('app.media.selected.goodsImg');
+    case 1: return $r('app.media.goodsImg');
+    case 2: return $r('app.media.goodsImg_2');
+    case 3: return $r('app.media.goodsImg_3');
+    case 4: return $r('app.media.goodsImg_4');
+    default: return $r('app.media.goodsImg');
   }
 }
 
 function getPhoneImage(index: number): Resource {
   switch (index) {
-    case 1: return $r('app.media.mobile_phone.phone1');
-    case 2: return $r('app.media.mobile_phone.phone2');
-    case 3: return $r('app.media.mobile_phone.phone3');
-    case 4: return $r('app.media.mobile_phone.phone4');
-    default: return $r('app.media.mobile_phone.phone1');
+    case 1: return $r('app.media.phone1');
+    case 2: return $r('app.media.phone2');
+    case 3: return $r('app.media.phone3');
+    case 4: return $r('app.media.phone4');
+    default: return $r('app.media.phone1');
   }
 }
-
-// ... 类似地定义其他分类的函数
+function getClothesImage(index: number): Resource {
+  switch (index) {
+    case 1: return $r('app.media.clothes1');
+    case 2: return $r('app.media.clothes2');
+    case 3: return $r('app.media.clothes3');
+    case 4: return $r('app.media.clothes4');
+    default: return $r('app.media.clothes1');
+  }
+}
+function getWearImage(index: number): Resource {
+  switch (index) {
+    case 1: return $r('app.media.wear1');
+    case 2: return $r('app.media.wear2');
+    case 3: return $r('app.media.wear3');
+    case 4: return $r('app.media.wear4');
+    default: return $r('app.media.wear1');
+  }
+}
+function getHomeImage(index: number): Resource {
+  switch (index) {
+    case 1: return $r('app.media.home1');
+    case 2: return $r('app.media.home2');
+    case 3: return $r('app.media.home3');
+    case 4: return $r('app.media.home4');
+    default: return $r('app.media.home1');
+  }
+}
 
 // 初始化商品数据
 export function initGoodsData(): GoodsListItemType[] {
